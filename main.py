@@ -4,6 +4,7 @@ from supabase import create_client, Client #type: ignore
 import os
 from dotenv import load_dotenv #type: ignore
 from postgrest.exceptions import APIError #type: ignore
+from datetime import datetime
 load_dotenv()
 secret_key = os.environ.get("SECRET_KEY")
 supabase_key = os.environ.get("SUPABASE_KEY")
@@ -12,8 +13,12 @@ supabase = None
 app = Flask(__name__, 
     static_folder=os.path.join(os.path.dirname(__file__), "static"),
     static_url_path="/static")
+def format_datetime(dtm):
+    dt = datetime.fromisoformat(dtm)
+    return dt.strftime("%b %d, %Y %I:%M %p")
 app.config['SECRET_KEY'] = secret_key
 appUrl = "https://tmchat.gradyblackwell.dev"
+#appUrl = "http://127.0.0.1:8000/"
 def get_supabase():
     global supabase
     if supabase is None:
@@ -44,7 +49,9 @@ def get_messages():
         return jsonify({'error':'no room found'}), 
     else:
         try:
-            response = get_supabase().table('messages').select('sender', 'content').execute()
+            response = get_supabase().table('messages').select('sender', 'content', 'created_at').execute()
+            for message in response.data:
+                message['created_at'] = format_datetime(message['created_at'])
             return jsonify(response.data), 200
         except APIError as e:
             return jsonify({'error':e}), 400

@@ -8,6 +8,17 @@ supabase
         process_change(payload)
     })
     .subscribe();
+function formatDateTime(dtStr) {
+    const dt = new Date(dtStr);
+    return dt.toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true
+    });
+}
 async function submitMessage() {
     var data = {'sender': document.getElementById('nameInput').innerText, 'content': document.getElementById("msgInput").value }
     if (data['content'].trim() == "") {
@@ -45,7 +56,7 @@ async function getMessages() {
             var message = response[i]
             if (message['content'] !== undefined && message['sender'] !== undefined) {
                 var messageP = document.createElement("p");
-                messageP.innerHTML = `[<b>${message['sender']}</b>] ${message['content']}`;
+                messageP.innerHTML = `[<b>${message['sender']}</b>] ${message['content']} <i>(${message['created_at']})</i>`;
                 messagesDiv.appendChild(messageP);
             }
         }
@@ -79,7 +90,8 @@ async function process_change(payload) {
     if (payload['eventType'] == "INSERT") {
         console.log(payload['new']['sender'] + " sent a message saying " + payload['new']['content'])
         var messageP = document.createElement("p");
-        messageP.innerHTML = `<b>[${payload['new']['sender']}]</b> ${payload['new']['content']}`;
+        payload['new']['created_at'] = formatDateTime(payload['new']['created_at']);
+        messageP.innerHTML = `<b>[${payload['new']['sender']}]</b> ${payload['new']['content']} <i>(${payload['new']['created_at']})</i>`;
         messagesDiv.appendChild(messageP);
     }
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
