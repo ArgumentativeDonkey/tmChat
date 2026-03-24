@@ -1,0 +1,30 @@
+body {
+    font-family: "IBM Plex Mono", monospace;
+    background-color: rgb(0, 0, 0);
+    color: rgb(44, 183, 44);
+    font-size: 13px;
+    overflow: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;  
+    background: transparent; 
+}
+.messagesDiv {
+    height: 95vh;
+    overflow: scroll;
+    scrollbar-width: 0px;
+    width: 100vw+10px;
+    overflow-x: hidden;
+}
+.msgInput {
+    background-color: black;
+    border: none;
+    color: rgb(44, 183, 44);
+}
+.nameInput {
+    width: fit-content;
+    overflow-y: hidden;
+}
+.msgInput:focus, .nameInput:focus {
+    outline: none;
+}
