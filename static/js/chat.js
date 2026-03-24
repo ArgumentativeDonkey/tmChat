@@ -85,7 +85,7 @@ async function process_change(payload) {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 getMessages()
-if (localStorage.getItem('username', document.getElementById("nameInput").innerText) !== undefined) {
-    document.getElementById('nameInput').innerText = localStorage.getItem('username', document.getElementById("nameInput").innerText)
+if (localStorage.getItem('username') !==undefined && localStorage.getItem('username').trim() !== "") {
+    document.getElementById('nameInput').innerText = localStorage.getItem('username');
 
 }
