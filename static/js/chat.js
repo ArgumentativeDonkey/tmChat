@@ -61,6 +61,7 @@ document.addEventListener("keyup", (e)=>{
     if (document.getElementById("nameInput").innerHTML == "") {
         document.getElementById("nameInput").innerHTML = " "
     }
+    localStorage.setItem('username', document.getElementById("nameInput").innerText)
 })
 
 document.getElementById('nameInput').addEventListener('keypress', (evt) => {
@@ -84,3 +85,7 @@ async function process_change(payload) {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 getMessages()
+if (localStorage.getItem('username', document.getElementById("nameInput").innerText) !== undefined) {
+    document.getElementById('nameInput').innerText = localStorage.getItem('username', document.getElementById("nameInput").innerText)
+
+}
