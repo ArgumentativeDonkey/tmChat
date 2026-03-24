@@ -13,8 +13,7 @@ app = Flask(__name__,
     static_folder=os.path.join(os.path.dirname(__file__), "static"),
     static_url_path="/static")
 app.config['SECRET_KEY'] = secret_key
-appUrl = "https://127.0.0.1:8000"
-CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": appUrl}})
+appUrl = "https://tmchat.gradyblackwell.dev"
 def get_supabase():
     global supabase
     if supabase is None:
