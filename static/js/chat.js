@@ -89,3 +89,4 @@ if (localStorage.getItem('username') !==undefined && localStorage.getItem('usern
     document.getElementById('nameInput').innerText = localStorage.getItem('username');
 
 }
+document.documentElement.scrollTop = document.documentElement.scrollHeight;
