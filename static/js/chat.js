@@ -73,16 +73,6 @@ async function getMessages(reversed = false, offset = 0) {
         if(reversed) {
             response.reverse();
         }
-        if (response.length == 50) {
-            let loadMoreMessage = document.createElement("p");
-            loadMoreMessage.className = "load-more";
-            loadMoreMessage.textContent = "Load more messages";
-            loadMoreMessage.addEventListener("click", () => {
-                const offset = knownOffset + 50;
-                getMessages(true, offset);
-            });
-            messagesDiv.prepend(loadMoreMessage);
-        }
         for (var i in response) {
             var message = response[i]
             if (message['content'] !== undefined && message['sender'] !== undefined) {
@@ -94,6 +84,17 @@ async function getMessages(reversed = false, offset = 0) {
                     messagesDiv.prepend(messageP);
                 }
             }
+        }
+        if (response.length == 50) {
+            let loadMoreMessage = document.createElement("p");
+            loadMoreMessage.className = "load-more";
+            loadMoreMessage.textContent = "Load more messages";
+            loadMoreMessage.addEventListener("click", () => {
+                const offset = knownOffset + 50;
+                getMessages(true, offset);
+                messagesDiv.remove();
+            });
+            messagesDiv.prepend(loadMoreMessage);
         }
     }
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
