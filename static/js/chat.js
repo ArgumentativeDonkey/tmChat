@@ -73,7 +73,7 @@ async function getMessages(reversed = false, offset = 0) {
         if(reversed) {
             response.reverse();
         }
-        if (response.length == 0) {
+        if (response.length == 50) {
             let loadMoreMessage = document.createElement("p");
             loadMoreMessage.className = "load-more";
             loadMoreMessage.textContent = "Load more messages";
