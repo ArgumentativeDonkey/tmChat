@@ -55,7 +55,9 @@ def get_messages():
             response = get_supabase().table('messages').select('sender', 'content', 'created_at').limit(50).order("created_at", desc=True).execute()
             for message in response.data:
                 message['created_at'] = format_datetime(message['created_at'])  # ty:ignore[invalid-assignment, not-subscriptable, invalid-argument-type]
-            return jsonify(response.data.reverse()), 200
+            response_data = response.data
+            response_data.reverse()
+            return jsonify(response.data), 200
         except APIError as e:
             return jsonify({'error':e}), 400
 
