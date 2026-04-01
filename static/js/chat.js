@@ -92,7 +92,7 @@ async function getMessages(reversed = false, offset = 0) {
             loadMoreMessage.addEventListener("click", () => {
                 const offset = knownOffset + 50;
                 getMessages(true, offset);
-                messagesDiv.remove();
+                loadMoreMessage.remove();
             });
             messagesDiv.prepend(loadMoreMessage);
         }
