@@ -33,6 +33,11 @@ async function submitMessage() {
     if (data['content'].trim() == "") {
         return
     }
+    if (data['content'] == "?light") {
+        const url = new URL(window.location.href);
+        url.searchParams.set("theme", "light");
+        window.location.href = url;
+    }
     const res = await fetch(appUrl + '/api/submitmessage', {
         method: "POST",
         headers: {

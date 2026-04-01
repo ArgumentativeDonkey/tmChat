@@ -1,7 +1,12 @@
+:root {
+    --theme-bg: rgb(0, 0, 0);
+    --theme-color: rgb(44, 183, 44);
+    --theme-placeholder-color: rgba(44, 183, 44, 0.5);
+}
 body {
     font-family: "IBM Plex Mono", monospace;
-    background-color: rgb(0, 0, 0);
-    color: rgb(44, 183, 44);
+    background-color: var(--theme-bg);
+    color: var(--theme-color);
     font-size: 13px;
     overflow-y: hidden;
 }
@@ -17,14 +22,16 @@ body {
     overflow-x: hidden;
 }
 .msgInput {
-    background-color: black;
+    background-color: var(--theme-bg);
     border: none;
-    color: rgb(44, 183, 44);
+    color: var(--theme-color);
     font-family: inherit;
+    font-size: inherit;
 }
 .msgInput::placeholder {
-    color: rgba(44, 183, 44, 0.5);
+    color: var(--theme-placeholder-color);
     font-family: inherit;
+    font-size: inherit;
 }
 .nameInput {
     width: fit-content;
