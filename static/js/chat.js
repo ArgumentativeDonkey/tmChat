@@ -53,10 +53,14 @@ async function submitMessage() {
     }
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
-async function getMessages() {
-    console.log("Fetching messages...")
-    var data = {};
-    data['room'] = 'general'
+let knownOffset = 0;
+async function getMessages(reversed = false, offset = 0) {
+    knownOffset = offset;
+    console.log("Fetching messages...");
+    var data = {
+        room: 'general',
+        offset: offset
+    };
     const res = await fetch(appUrl + '/api/getmessages', {
         method: "POST",
         headers: {
@@ -65,13 +69,29 @@ async function getMessages() {
         body: JSON.stringify(data)
     })
     if (res.ok) {
-        var response = await res.json()
+        var response = await res.json();
+        if(reversed) {
+            response.reverse();
+        }
+        if (response.length == 0) {
+            let loadMoreMessage = document.createElement("p");
+            loadMoreMessage.className = "load-more";
+            loadMoreMessage.textContent = "Load more messages";
+            loadMoreMessage.addEventListener("click", () => {
+                const offset = knownOffset + 50;
+                getMessages(true, offset);
+            });
+        }
         for (var i in response) {
             var message = response[i]
             if (message['content'] !== undefined && message['sender'] !== undefined) {
                 var messageP = document.createElement("p");
                 messageP.innerHTML = `[<b>${escapeHTML(message['sender'])}</b>] ${escapeHTML(message['content'])} <i>(${message['created_at']})</i>`;
-                messagesDiv.appendChild(messageP);
+                if (!reversed) {
+                    messagesDiv.appendChild(messageP);
+                } else {
+                    messagesDiv.prepend(messageP);
+                }
             }
         }
     }
