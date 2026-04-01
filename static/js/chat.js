@@ -97,7 +97,7 @@ async function getMessages(reversed = false, offset = 0) {
             messagesDiv.prepend(loadMoreMessage);
         }
     }
-    if (offset != 0) {
+    if (offset == 0) {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 }
