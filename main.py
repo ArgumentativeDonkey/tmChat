@@ -1,15 +1,18 @@
-from flask import Flask, render_template, session, send_from_directory, request, jsonify, redirect, url_for #type: ignore
-from flask_cors import CORS #type: ignore
-from supabase import create_client, Client #type: ignore
+from flask import Flask, render_template, request, jsonify #type: ignore  # ty:ignore[unused-type-ignore-comment, unused-ignore-comment]
+from flask_cors import CORS #type: ignore  # ty:ignore[unused-type-ignore-comment, unused-ignore-comment]
+from supabase import create_client, Client #type: ignore  # ty:ignore[unused-type-ignore-comment, unused-ignore-comment]
 import os
-from dotenv import load_dotenv #type: ignore
-from postgrest.exceptions import APIError #type: ignore
+from dotenv import load_dotenv #type: ignore  # ty:ignore[unused-type-ignore-comment, unused-ignore-comment]
+from postgrest.exceptions import APIError #type: ignore  # ty:ignore[unused-type-ignore-comment, unused-ignore-comment]
 from datetime import datetime
 load_dotenv()
 secret_key = os.environ.get("SECRET_KEY")
 supabase_key = os.environ.get("SUPABASE_KEY")
 supabase_url = os.environ.get("SUPABASE_URL")
-supabase = None
+assert supabase_key is not None
+assert supabase_url is not None
+
+supabase: Client | None = None
 app = Flask(__name__, 
     static_folder=os.path.join(os.path.dirname(__file__), "static"),
     static_url_path="/static")
@@ -19,10 +22,10 @@ def format_datetime(dtm):
 app.config['SECRET_KEY'] = secret_key
 appUrl = "https://tmchat.gradyblackwell.dev"
 #appUrl = "http://127.0.0.1:8000/"
-def get_supabase():
+def get_supabase() -> Client:
     global supabase
     if supabase is None:
-        supabase = create_client(supabase_url, supabase_key)
+        supabase = create_client(supabase_url, supabase_key)  # ty:ignore[invalid-argument-type]
     return supabase
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": appUrl}})
 @app.route("/", methods=['GET'])
@@ -45,14 +48,14 @@ def submit_message():
 @app.route("/api/getmessages", methods=['POST'])
 def get_messages():
     data = request.json
-    if (data['room'] == None):
+    if (data['room'] is None):
         return jsonify({'error':'no room found'}), 
     else:
         try:
-            response = get_supabase().table('messages').select('sender', 'content', 'created_at').execute()
+            response = get_supabase().table('messages').select('sender', 'content', 'created_at').limit(50).order("created_at", desc=True).execute()
             for message in response.data:
-                message['created_at'] = format_datetime(message['created_at'])
-            return jsonify(response.data), 200
+                message['created_at'] = format_datetime(message['created_at'])  # ty:ignore[invalid-assignment, not-subscriptable, invalid-argument-type]
+            return jsonify(response.data.reverse()), 200
         except APIError as e:
             return jsonify({'error':e}), 400
 
