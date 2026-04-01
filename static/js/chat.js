@@ -97,7 +97,9 @@ async function getMessages(reversed = false, offset = 0) {
             messagesDiv.prepend(loadMoreMessage);
         }
     }
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    if (offset != 0) {
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
 }
 document.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
