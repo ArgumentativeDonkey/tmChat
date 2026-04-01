@@ -2,7 +2,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 const appUrl = window.location.origin;
 const messagesDiv = document.getElementById("messagesDiv")
-supabase
+  supabase
     .channel("db-changes")
     .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, (payload) => {
         process_change(payload)
@@ -19,6 +19,14 @@ function formatDateTime(dtStr) {
         hour12: true
     });
 }
+function escapeHTML(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 async function submitMessage() {
     var data = {'sender': document.getElementById('nameInput').innerText, 'content': document.getElementById("msgInput").value }
     if (data['content'].trim() == "") {
@@ -56,7 +64,7 @@ async function getMessages() {
             var message = response[i]
             if (message['content'] !== undefined && message['sender'] !== undefined) {
                 var messageP = document.createElement("p");
-                messageP.innerHTML = `[<b>${message['sender']}</b>] ${message['content']} <i>(${message['created_at']})</i>`;
+                messageP.innerHTML = `[<b>${escapeHTML(message['sender'])}</b>] ${escapeHTML(message['content'])} <i>(${message['created_at']})</i>`;
                 messagesDiv.appendChild(messageP);
             }
         }
@@ -83,6 +91,7 @@ document.getElementById('nameInput').addEventListener('keypress', (evt) => {
     if (document.getElementById("nameInput").innerText.length >= 10) {
         evt.preventDefault();
     }
+    //document.getElementById("nameInput").innerText = escapeHTML(document.getElementById("nameInput").innerText)
 });
 
 async function process_change(payload) {
@@ -91,7 +100,7 @@ async function process_change(payload) {
         console.log(payload['new']['sender'] + " sent a message saying " + payload['new']['content'])
         var messageP = document.createElement("p");
         payload['new']['created_at'] = formatDateTime(payload['new']['created_at']);
-        messageP.innerHTML = `<b>[${payload['new']['sender']}]</b> ${payload['new']['content']} <i>(${payload['new']['created_at']})</i>`;
+        messageP.innerHTML = `<b>[${escapeHTML(payload['new']['sender'])}]</b> ${escapeHTML(payload['new']['content'])} <i>(${payload['new']['created_at']})</i>`;
         messagesDiv.appendChild(messageP);
     }
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
