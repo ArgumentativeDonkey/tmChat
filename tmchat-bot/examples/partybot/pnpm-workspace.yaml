@@ -1,0 +1,2 @@
+overrides:
+  tschat-bot: link:../../../AppData/Local/pnpm/global/5/node_modules/tschat-bot

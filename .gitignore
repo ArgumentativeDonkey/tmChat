@@ -1,3 +1,9 @@
+# Prevent .venv from saving
+.venv
+
+# Prevent node_modules
+node_modules/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
