@@ -49,10 +49,11 @@ def submit_message():
 def get_messages():
     data = request.json
     if (data['room'] is None):
-        return jsonify({'error':'no room found'}), 
+        return jsonify({'error':'no room found'})
     else:
         try:
-            response = get_supabase().table('messages').select('sender', 'content', 'created_at').limit(50).order("created_at", desc=True).execute()
+            offset: int = data['offset'] or 0
+            response = get_supabase().table('messages').select('sender', 'content', 'created_at').limit(50).offset(offset).order("created_at", desc=True).execute()
             for message in response.data:
                 message['created_at'] = format_datetime(message['created_at'])  # ty:ignore[invalid-assignment, not-subscriptable, invalid-argument-type]
             response_data = response.data
