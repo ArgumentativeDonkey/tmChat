@@ -15,8 +15,10 @@
 
 <body>
     <div id="messagesDiv" class="messagesDiv"></div>
-    <p style="display: inline-block;">[</p><span class="nameInput" id="nameInput" contenteditable="true">User</span><p style="display: inline-block;">]</p>
+    <div id="inputs">
+    <p style="display: inline-block;">[</p><p class="nameInput" id="nameInput" contenteditable="true">User</p><p style="display: inline-block;">]</p>
     <input id="msgInput" class="msgInput" placeholder="message...">
+    </div>
 </body>
 <script>
     var SUPABASE_ANON_KEY = "{{ supabase_anon_key }}";
