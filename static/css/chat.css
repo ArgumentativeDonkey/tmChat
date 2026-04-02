@@ -51,6 +51,9 @@ body {
     pointer-events: none;
     margin: 0;
 }
+#messagesDiv p i {
+    color: var(--theme-placeholder-color);
+}
 .msgInput {
     background-color: var(--theme-bg);
     border: none;
