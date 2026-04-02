@@ -12,28 +12,22 @@ pub struct TMBot {
     pub api_url: String,
     pub supabase_url: String,
     supabase_key: String,
-    pub name: Option<String>,
+    pub name: String,
 }
 
 impl TMBot {
-    pub fn new(api_url: String, supabase_url: String, supabase_key: String) -> Self {
+    pub fn new(api_url: String, supabase_url: String, supabase_key: String, name: String) -> Self {
         Self {
             api_url,
             supabase_key,
             supabase_url,
-            name: None,
+            name,
         }
-    }
-    /// Name must be less than or equal to 10 characters in length!
-    pub fn with_name(mut self, name: String) -> Self {
-        debug_assert!(name.chars().count() <= 10);
-        self.name = Some(name);
-        self
     }
     pub async fn send_message(&self, content: String) -> anyhow::Result<Response> {
         let client = Client::new();
         let data = Message {
-            sender: self.name.clone().unwrap_or("TMChatBot".into()),
+            sender: self.name.clone(),
             content,
         };
 
@@ -73,7 +67,7 @@ impl TMBot {
                 unreachable!("all changes are inserts");
             };
             let message: Message = payload.new.try_into().unwrap();
-            if message.sender == self.name.clone().unwrap_or_default() {
+            if message.sender == self.name {
                 continue;
             }
             callback(message).await;
