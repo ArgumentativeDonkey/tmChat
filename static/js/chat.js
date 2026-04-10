@@ -101,7 +101,10 @@ async function getMessages(reversed = false, offset = 0) {
     if (offset == 0) {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-    document.getElementById("md-delete").remove();
+    del = document.getElementById("md-delete");
+    if (del) {
+        del.remove();
+    }
 }
 document.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
