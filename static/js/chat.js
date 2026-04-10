@@ -89,9 +89,10 @@ async function getMessages(reversed = false, offset = 0) {
             let loadMoreMessage = document.createElement("p");
             loadMoreMessage.className = "load-more";
             loadMoreMessage.textContent = "Load more messages";
-            loadMoreMessage.addEventListener("click", () => {
+            loadMoreMessage.addEventListener("click", async () => {
                 const offset = knownOffset + 50;
-                getMessages(true, offset);
+                loadMoreMessage.innerHTML = "Loading&hellip;"
+                await getMessages(true, offset);
                 loadMoreMessage.remove();
             });
             messagesDiv.prepend(loadMoreMessage);

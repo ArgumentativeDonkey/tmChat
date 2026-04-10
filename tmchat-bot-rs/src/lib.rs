@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use log::{debug, info};
 use reqwest::{Client, Response};
 use serde::{Deserialize, Serialize, de::Error};
 use serde_json::Value;
@@ -25,6 +26,7 @@ impl TMBot {
         }
     }
     pub async fn send_message(&self, content: String) -> anyhow::Result<Response> {
+        debug!("Sending message {content}");
         let client = Client::new();
         let data = Message {
             sender: self.name.clone(),
@@ -42,6 +44,7 @@ impl TMBot {
     where
         F: AsyncFn(Message) + 'static,
     {
+        info!("Subscribing...");
         let client = RealtimeClient::new(
             self.supabase_url.clone(),
             RealtimeClientOptions {
@@ -63,6 +66,7 @@ impl TMBot {
         channel.subscribe().await?;
 
         while let Some(change) = listener.recv().await {
+            debug!("reacting to change");
             let PostgresChangesPayload::Insert(payload) = change else {
                 unreachable!("all changes are inserts");
             };
