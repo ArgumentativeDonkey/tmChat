@@ -101,8 +101,8 @@ async function getMessages(reversed = false, offset = 0) {
     if (offset == 0) {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-    del = document.getElementById("md-delete");
-    if (del) {
+    let del = document.getElementById("md-delete");
+    if (del != undefined && del != null) {
         del.remove();
     }
 }
